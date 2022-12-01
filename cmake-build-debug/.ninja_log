@@ -1,0 +1,8 @@
+# ninja log v5
+0	2111	6915584396597249	CMakeFiles/Final_Project.dir/main.cpp.obj	4d28e87f03bd6d26
+3	2389	6915584399380998	CMakeFiles/Final_Project.dir/arbitrage.cpp.obj	c805ec0f3826fbb1
+2389	2536	6915584400747528	Final_Project.exe	6f0488c95edc0658
+2	2417	6915585582123362	CMakeFiles/Final_Project.dir/arbitrage.cpp.obj	c805ec0f3826fbb1
+2417	2542	6915585583363053	Final_Project.exe	6f0488c95edc0658
+2	1975	6915586251043288	CMakeFiles/Final_Project.dir/main.cpp.obj	4d28e87f03bd6d26
+1975	2100	6915586252272602	Final_Project.exe	6f0488c95edc0658

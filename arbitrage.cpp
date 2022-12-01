@@ -85,11 +85,10 @@ vector<string> Arbitrage::GetArbitrage() {
 }
 
 double Arbitrage::GetExchangeRate(const string &currencyA, const string &currencyB) {
+    // check for invalid currency input
     if (currencyA == currencyB) return 1;
     if (currency_index_.find(currencyA) == currency_index_.end() || currency_index_.find(currencyB) == currency_index_.end()) return 0;
 
-    size_t indexA = currency_index_[currencyA];
-    size_t indexB = currency_index_[currencyB];
-    double rate = adjacency_matrix_[indexA][indexB];
-    return rate;
+    // retrieve the exchange rate from the adjacency matrix
+    return adjacency_matrix_[currency_index_[currencyA]][currency_index_[currencyB]];
 }
