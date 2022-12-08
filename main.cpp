@@ -3,24 +3,33 @@
 
 int main() {
     Arbitrage arbitrage("exchange_rate.csv", "location.csv");
-    if (arbitrage.IsArbitrage()) {
-        std::cout << "Arbitrage found: ";
-        vector<string> arbitrage_path = arbitrage.GetArbitrage();
+
+    vector<vector<string>> result = arbitrage.GetArbitrage();
+    for (auto & arbitrage_path : result) {
+        double conversion_rate = 1;
         for (size_t i = 0; i < arbitrage_path.size(); i++) {
             if (i == arbitrage_path.size() - 1) {
-                std::cout << arbitrage_path[i] << std::endl;
+                std::cout << arbitrage_path[i] << " at rate: "
+                // print the conversion rate in full
+                << std::fixed << std::setprecision(8) << conversion_rate << std::endl;
             } else {
                 std::cout << arbitrage_path[i] << " -> ";
+                conversion_rate *= arbitrage.GetExchangeRate(arbitrage_path[i], arbitrage_path[i + 1]);
             }
         }
-    } else {
-        cout << "Arbitrage does not exist!" << endl;
     }
-    cout << "TRY to IDR: " << arbitrage.GetExchangeRate("TRY", "IDR") << endl;
-    cout << "IDR to TRY: " << arbitrage.GetExchangeRate("IDR", "TRY") << endl;
-    cout << "USD to CNY: " << arbitrage.GetExchangeRate("USD", "CNY") << endl;
-    cout << "CNY to USD: " << arbitrage.GetExchangeRate("CNY", "USD") << endl;
-    cout << "CNY to CNY: " << arbitrage.GetExchangeRate("CNY", "CNY") << endl;
-    cout << "XXX to CNY: " << arbitrage.GetExchangeRate("XXX", "CNY") << endl;
+    cout << endl;
+    cout << "Direct conversion from HKD to ILS: " << arbitrage.GetExchangeRate("HKD", "ILS") << endl;
+    cout << "Better exchange rate from HKD to ILS: ";
+    vector<string> exchange_strategy = arbitrage.GetBetterExchangeRate("HKD", "ILS");
+    for (size_t i = 0; i < exchange_strategy.size(); i++) {
+        if (i == exchange_strategy.size() - 1) {
+            std::cout << "; final exchange rate: "<< exchange_strategy[i] << std::endl;
+        } else if (i == exchange_strategy.size() - 2) {
+            std::cout << exchange_strategy[i];
+        } else {
+            std::cout << exchange_strategy[i] << " -> ";
+        }
+    }
     return 0;
 }

@@ -83,7 +83,19 @@ bool Arbitrage::IsArbitrage() {
     return false;
 }
 
-vector<string> Arbitrage::GetArbitrage() {
+vector<vector<string>> Arbitrage::GetArbitrage() {
+    // initialize the prohibited conversion
+    prohibited_ = vector<vector<bool>>(currency_index_.size(), vector<bool>(currency_index_.size(), false));
+    vector<vector<string>> result;
+    vector<string> path = GetArbitrageHelper();
+    while (!path.empty()) {
+        result.push_back(path);
+        path = GetArbitrageHelper();
+    }
+    return result;
+}
+
+vector<string> Arbitrage::GetArbitrageHelper() {
     // print the arbitrage path using Bellman-Ford algorithm
     size_t vertex_num = currency_index_.size();
     size_t edge_num = edges_negative_log_.size();
@@ -108,6 +120,7 @@ vector<string> Arbitrage::GetArbitrage() {
         for (size_t j = 0; j < edge_num; j++) {
             size_t from = edges_negative_log_[j].from;
             size_t to = edges_negative_log_[j].to;
+            if (prohibited_[from][to]) continue;
             double weight = edges_negative_log_[j].weight;
             if (distance[from] != numeric_limits<double>::max()
                 && distance[from] + weight < distance[to]) {
@@ -123,6 +136,7 @@ vector<string> Arbitrage::GetArbitrage() {
     for (size_t i = 0; i < edge_num; i++) {
         size_t from = edges_negative_log_[i].from;
         size_t to = edges_negative_log_[i].to;
+        if (prohibited_[from][to]) continue;
         double weight = edges_negative_log_[i].weight;
         if (distance[from] != numeric_limits<double>::max()
             && distance[from] + weight < distance[to]) {
@@ -134,16 +148,24 @@ vector<string> Arbitrage::GetArbitrage() {
     // if there is a negative cycle, print the arbitrage path
     if (negative_cycle_vertex != -1) {
         vector<string> arbitrage_path;
+        vector<size_t> arbitrage_path_index;
         for (size_t i = 0; i < vertex_num; i++) {
             negative_cycle_vertex = parent[negative_cycle_vertex];
         }
         size_t start = negative_cycle_vertex;
         arbitrage_path.push_back(index_currency_[start]);
+        arbitrage_path_index.push_back(start);
         while (parent[negative_cycle_vertex] != start) {
             negative_cycle_vertex = parent[negative_cycle_vertex];
             arbitrage_path.push_back(index_currency_[negative_cycle_vertex]);
+            arbitrage_path_index.push_back(negative_cycle_vertex);
         }
         arbitrage_path.push_back(index_currency_[start]);
+        for (size_t v = 0; v < arbitrage_path_index.size(); v++) {
+            for (size_t j = 0; j < arbitrage_path_index.size(); j++) {
+                prohibited_[arbitrage_path_index[v]][arbitrage_path_index[j]] = true;
+            }
+        }
         // reverse the arbitrage path
         reverse(arbitrage_path.begin(), arbitrage_path.end());
         return arbitrage_path;
@@ -162,11 +184,53 @@ double Arbitrage::GetExchangeRate(const string &currencyA, const string &currenc
     return adjacency_matrix_[currency_index_[currencyA]][currency_index_[currencyB]];
 }
 
-vector<string> Arbitrage::FindBestExchangeRate(const string &currency_from, const string &currency_to) {
+vector<string> Arbitrage::GetBetterExchangeRate(const string &currency_from, const string &currency_to) {
     // check for invalid currency input
     if (currency_from == currency_to) return {};
     if (currency_index_.find(currency_from) == currency_index_.end() || currency_index_.find(currency_to) == currency_index_.end()) return {};
+    if (prohibited_.empty()) GetArbitrage(); // construct the prohibited conversion matrix if it is empty
+    if (prohibited_[currency_index_[currency_from]][currency_index_[currency_to]]) {
+        return {currency_from, currency_to, to_string(GetExchangeRate(currency_from, currency_to))};
+    }
+    size_t vertex_num = currency_index_.size();
+    size_t edge_num = edges_negative_log_.size();
+    vector<double> distance(vertex_num, numeric_limits<double>::max()); // distance each vertex from the source
+    vector<size_t> parent(vertex_num, -1); // parent of each vertex
 
-    return vector<string>();
+    // initialize the distance vector and the parent vector for the source
+    distance[currency_index_[currency_from]] = 0;
+    parent[currency_index_[currency_from]] = currency_index_[currency_from];
 
+    // relax the edges (limit - 1) times
+    for (size_t i = 1; i <= vertex_num - 1; i++) {
+        for (size_t j = 0; j < edge_num; j++) {
+            size_t from = edges_negative_log_[j].from;
+            size_t to = edges_negative_log_[j].to;
+            if (prohibited_[from][to]) continue;
+            double weight = edges_negative_log_[j].weight;
+            if (distance[from] != numeric_limits<double>::max()
+                && distance[from] + weight < distance[to]) {
+                distance[to] = distance[from] + weight;
+                parent[to] = from;
+            }
+        }
+    }
+
+    // return the path
+    vector<string> path;
+    size_t current_index = currency_index_[currency_to];
+    while (current_index != currency_index_[currency_from]) {
+        path.push_back(index_currency_[current_index]);
+        current_index = parent[current_index];
+    }
+    path.push_back(currency_from);
+    reverse(path.begin(), path.end());
+
+    // calculate the exchange rate
+    double exchange_rate = 1;
+    for (size_t i = 0; i < path.size() - 1; i++) {
+        exchange_rate *= GetExchangeRate(path[i], path[i + 1]);
+    }
+    path.push_back(to_string(exchange_rate));
+    return path;
 }
