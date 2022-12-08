@@ -66,6 +66,8 @@ public:
      * The program will seek for the best strategy (using Bellman-Ford algorithm) to exchange
      * the source currency to the destination currency via a number of intermediate currency.
      * The result strategy will be returned by a vector list with the name of each currency as its element.
+     * Note: if two currencies are the same or one of the currencies does not exist, the function will output
+     * an empty vector.
      * @param currency_from : the name of the source currency
      * @param currency_to : the name of the destination currency
      * @return a vector list with the name of each currency as its element.

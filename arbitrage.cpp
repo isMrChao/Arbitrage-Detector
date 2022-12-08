@@ -163,6 +163,9 @@ double Arbitrage::GetExchangeRate(const string &currencyA, const string &currenc
 }
 
 vector<string> Arbitrage::FindBestExchangeRate(const string &currency_from, const string &currency_to) {
+    // check for invalid currency input
+    if (currency_from == currency_to) return {};
+    if (currency_index_.find(currency_from) == currency_index_.end() || currency_index_.find(currency_to) == currency_index_.end()) return {};
 
     return vector<string>();
 
