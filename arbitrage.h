@@ -61,10 +61,10 @@ public:
 
 private:
     vector<vector<double>> adjacency_matrix_;
-    vector<vector<double>> adjacency_matrix_negative_log_; // negative log of the edge weight (for Floyd-Warshall algorithm)
-    vector<Edge> edges_negative_log_; // negative log of the edge weight (for Bellman-Ford algorithm)
-    map<string, size_t> currency_index_; // map from currency name to index (or id)
-    map<size_t, string> index_currency_; // map from index (or id) to currency name
+    vector<vector<double>> adjacency_matrix_negative_log_;  // negative log of the edge weight (Floyd-Warshall algorithm)
+    vector<Edge> edges_negative_log_;                       // negative log of the edge weight (Bellman-Ford algorithm)
+    map<string, size_t> currency_index_;                    // map from currency name to index (or id)
+    map<size_t, string> index_currency_;                    // map from index (or id) to currency name
 };
 
 #endif //ARBITRAGE_H
