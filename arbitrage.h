@@ -45,7 +45,9 @@ public:
      * negative cycle detection algorithm (Bellman-Ford algorithm).
      * If an arbitrage exists, the function will output a vector containing with the name of
      * each currencies to achieve arbitrage as its elements.
-     * @return a vector containing with the name of each currencies to achieve arbitrage as its elements
+     * If no arbitrage exists, the function will output an empty vector.
+     * @return a vector containing with the name of each currencies to achieve arbitrage as its elements.
+     * Empty vector if no arbitrage exists.
      */
     vector<string> GetArbitrage();
 
