@@ -120,7 +120,7 @@ vector<string> Arbitrage::GetArbitrageHelper() {
         for (size_t j = 0; j < edge_num; j++) {
             size_t from = edges_negative_log_[j].from;
             size_t to = edges_negative_log_[j].to;
-            if (prohibited_[from][to]) continue;
+            if (prohibited_[from][to]) continue; // skip the prohibited conversion
             double weight = edges_negative_log_[j].weight;
             if (distance[from] != numeric_limits<double>::max()
                 && distance[from] + weight < distance[to]) {
@@ -136,7 +136,7 @@ vector<string> Arbitrage::GetArbitrageHelper() {
     for (size_t i = 0; i < edge_num; i++) {
         size_t from = edges_negative_log_[i].from;
         size_t to = edges_negative_log_[i].to;
-        if (prohibited_[from][to]) continue;
+        if (prohibited_[from][to]) continue; // skip the prohibited conversion
         double weight = edges_negative_log_[i].weight;
         if (distance[from] != numeric_limits<double>::max()
             && distance[from] + weight < distance[to]) {
@@ -201,12 +201,12 @@ vector<string> Arbitrage::GetBetterExchangeRate(const string &currency_from, con
     distance[currency_index_[currency_from]] = 0;
     parent[currency_index_[currency_from]] = currency_index_[currency_from];
 
-    // relax the edges (limit - 1) times
+    // relax the edges (vertex_num - 1) times
     for (size_t i = 1; i <= vertex_num - 1; i++) {
         for (size_t j = 0; j < edge_num; j++) {
             size_t from = edges_negative_log_[j].from;
             size_t to = edges_negative_log_[j].to;
-            if (prohibited_[from][to]) continue;
+            if (prohibited_[from][to]) continue; // skip the prohibited conversion
             double weight = edges_negative_log_[j].weight;
             if (distance[from] != numeric_limits<double>::max()
                 && distance[from] + weight < distance[to]) {
