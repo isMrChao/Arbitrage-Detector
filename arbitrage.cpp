@@ -30,10 +30,12 @@ Arbitrage::Arbitrage(const string& exchange_rate_file, const string& location_fi
         // add the currency to the map if it is not in the map
         if (currency_index_.find(currencyA) == currency_index_.end()) {
             currency_index_[currencyA] = current_index;
+            index_currency_[current_index] = currencyA;
             current_index++;
         }
         if (currency_index_.find(currencyB) == currency_index_.end()) {
             currency_index_[currencyB] = current_index;
+            index_currency_[current_index] = currencyB;
             current_index++;
         }
         // get the index of the currency
@@ -49,10 +51,12 @@ Arbitrage::Arbitrage(const string& exchange_rate_file, const string& location_fi
     for (auto & it : currency_index_) {
         adjacency_matrix_[it.second][it.second] = 1;
         adjacency_matrix_negative_log_[it.second][it.second] = 0;
+        edges_negative_log_.emplace_back(it.second, it.second, 0);
     }
     for (auto & it : exchange_rate_map) {
         adjacency_matrix_[it.first.first][it.first.second] = it.second;
         adjacency_matrix_negative_log_[it.first.first][it.first.second] = -log(it.second);
+        edges_negative_log_.emplace_back(it.first.first, it.first.second, -log(it.second));
     }
 
     // TODO: read the location.csv file and construct the geo location map
@@ -80,8 +84,73 @@ bool Arbitrage::IsArbitrage() {
 }
 
 vector<string> Arbitrage::GetArbitrage() {
-    // TODO
-    return vector<string>();
+    // print the arbitrage path using Bellman-Ford algorithm
+    size_t vertex_num = currency_index_.size();
+    size_t edge_num = edges_negative_log_.size();
+
+    // initialize the distance vector and the parent vector
+    // the distance vector stores the shortest distance from the source to each vertex
+    // the parent vector stores the parent of each vertex
+    // the distance vector is initialized to infinity
+    // the parent vector is initialized to -1
+    vector<double> distance(vertex_num, numeric_limits<double>::max());
+    vector<size_t> parent(vertex_num, -1); // parent of each vertex
+
+    // set the source to be the first vertex
+    distance[0] = 0;
+    parent[0] = 0;
+
+    // relax the edges (vertex_num - 1) times
+    bool flag = true;
+    for (size_t i = 1; i <= vertex_num - 1; i++) {
+        if (!flag) break;
+        flag = false;
+        for (size_t j = 0; j < edge_num; j++) {
+            size_t from = edges_negative_log_[j].from;
+            size_t to = edges_negative_log_[j].to;
+            double weight = edges_negative_log_[j].weight;
+            if (distance[from] != numeric_limits<double>::max()
+                && distance[from] + weight < distance[to]) {
+                flag = true;
+                distance[to] = distance[from] + weight;
+                parent[to] = from;
+            }
+        }
+    }
+
+    // check if there is a negative cycle
+    size_t negative_cycle_vertex = -1;
+    for (size_t i = 0; i < edge_num; i++) {
+        size_t from = edges_negative_log_[i].from;
+        size_t to = edges_negative_log_[i].to;
+        double weight = edges_negative_log_[i].weight;
+        if (distance[from] != numeric_limits<double>::max()
+            && distance[from] + weight < distance[to]) {
+            negative_cycle_vertex = to;
+            break;
+        }
+    }
+
+    // if there is a negative cycle, print the arbitrage path
+    if (negative_cycle_vertex != -1) {
+        vector<string> arbitrage_path;
+        for (size_t i = 0; i < vertex_num; i++) {
+            negative_cycle_vertex = parent[negative_cycle_vertex];
+        }
+        size_t start = negative_cycle_vertex;
+        arbitrage_path.push_back(index_currency_[start]);
+        while (parent[negative_cycle_vertex] != start) {
+            negative_cycle_vertex = parent[negative_cycle_vertex];
+            arbitrage_path.push_back(index_currency_[negative_cycle_vertex]);
+        }
+        arbitrage_path.push_back(index_currency_[start]);
+        // reverse the arbitrage path
+        reverse(arbitrage_path.begin(), arbitrage_path.end());
+        return arbitrage_path;
+    } else {
+        // if there is no negative cycle, return an empty vector
+        return {};
+    }
 }
 
 double Arbitrage::GetExchangeRate(const string &currencyA, const string &currencyB) {

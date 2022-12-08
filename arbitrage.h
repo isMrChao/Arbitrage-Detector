@@ -11,6 +11,14 @@
 
 using namespace std;
 
+struct Edge {
+    // simple constructor for Edge
+    Edge(size_t from, size_t to, double weight) : from(from), to(to), weight(weight) {}
+    size_t from;
+    size_t to;
+    double weight;
+};
+
 class Arbitrage
 {
 public:
@@ -45,16 +53,18 @@ public:
      * @brief a function that takes in the name of two currencies and outputs the exchange rate
      * Notice: the function will output 0 if there is no exchange rate between the two currencies or
      * if one of the currencies does not exist.
-     * @param currencyA
-     * @param currencyB
+     * @param currencyA : currency from
+     * @param currencyB : currency to
      * @return a double representing the exchange rate
      */
     double GetExchangeRate(const string& currencyA, const string& currencyB);
 
 private:
     vector<vector<double>> adjacency_matrix_;
-    vector<vector<double>> adjacency_matrix_negative_log_;
-    map<string, size_t> currency_index_;
+    vector<vector<double>> adjacency_matrix_negative_log_; // negative log of the edge weight (for Floyd-Warshall algorithm)
+    vector<Edge> edges_negative_log_; // negative log of the edge weight (for Bellman-Ford algorithm)
+    map<string, size_t> currency_index_; // map from currency name to index (or id)
+    map<size_t, string> index_currency_; // map from index (or id) to currency name
 };
 
 #endif //ARBITRAGE_H
