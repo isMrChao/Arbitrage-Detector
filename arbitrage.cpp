@@ -161,3 +161,9 @@ double Arbitrage::GetExchangeRate(const string &currencyA, const string &currenc
     // retrieve the exchange rate from the adjacency matrix
     return adjacency_matrix_[currency_index_[currencyA]][currency_index_[currencyB]];
 }
+
+vector<string> Arbitrage::FindBestExchangeRate(const string &currency_from, const string &currency_to) {
+
+    return vector<string>();
+
+}

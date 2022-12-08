@@ -61,6 +61,17 @@ public:
      */
     double GetExchangeRate(const string& currencyA, const string& currencyB);
 
+    /**
+     * @brief a function that takes in two input - destination currency and source currency.
+     * The program will seek for the best strategy (using Bellman-Ford algorithm) to exchange
+     * the source currency to the destination currency via a number of intermediate currency.
+     * The result strategy will be returned by a vector list with the name of each currency as its element.
+     * @param currency_from : the name of the source currency
+     * @param currency_to : the name of the destination currency
+     * @return a vector list with the name of each currency as its element.
+     */
+    vector<string> FindBestExchangeRate(const string& currency_from, const string& currency_to);
+
 private:
     vector<vector<double>> adjacency_matrix_;
     vector<vector<double>> adjacency_matrix_negative_log_;  // negative log of the edge weight (Floyd-Warshall algorithm)
