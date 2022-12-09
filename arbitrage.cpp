@@ -212,9 +212,9 @@ double Arbitrage::GetExchangeRate(const string &currencyA, const string &currenc
 
 vector<string> Arbitrage::GetBetterExchangeRate(const string &currency_from, const string &currency_to) {
     // check for invalid currency input
-    if (currency_from == currency_to) return {};
     if (currency_from.empty() || currency_to.empty()) return {};
     if (currency_index_.find(currency_from) == currency_index_.end() || currency_index_.find(currency_to) == currency_index_.end()) return {};
+    if (currency_from == currency_to) return {currency_from, "1"};
     if (prohibited_.empty()) GetArbitrage(); // construct the prohibited conversion matrix if it is empty
     if (prohibited_[currency_index_[currency_from]][currency_index_[currency_to]]) {
         return {currency_from, currency_to, to_string(GetExchangeRate(currency_from, currency_to))};
@@ -309,6 +309,7 @@ string Arbitrage::GetMostValuableCurrency(const string &reference_currency, cons
     while (!q.empty()) {
         size_t current_index = q.front();
         q.pop();
+        if (visited[current_index]) continue;
         double current_exchange_rate;
         if (method == ExchangeMethod::DIRECT) current_exchange_rate = GetExchangeRate(index_currency_[current_index], reference_currency);
         else {

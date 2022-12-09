@@ -73,7 +73,7 @@ int main() {
 //    }
     std::cout << std::endl;
 
-    string most_valuable_currency = arbitrage.GetMostValuableCurrency("USD", {}, DIRECT);
+    string most_valuable_currency = arbitrage.GetMostValuableCurrency("USD", {}, BETTER_EXCHANGE_RATE);
     std::cout << "Most valuable currency: " << most_valuable_currency << std::endl;
     return 0;
 }

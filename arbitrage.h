@@ -76,8 +76,9 @@ public:
      * the source currency to the destination currency via a number of intermediate currency.
      * The result strategy will be returned by a vector list with the name of each currency as its element.
      * With the last element being the final exchange rate.
-     * Note: if two currencies are the same or one of the currencies does not exist, the function will output
-     * an empty vector.
+     * Note: if one of the currencies does not exist or empty, the function will output
+     * an empty vector. If two currencies are the same, the function will output a vector
+     * containing only the currency name and the exchange rate of 1.
      *
      * Since negative cycles exist, the function will seek for a strategy that will not involve any negative cycle
      * using the prohibited_ matrix, which records all of the known edges that exist between the vertices in a some
