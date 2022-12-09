@@ -63,7 +63,6 @@ Arbitrage::Arbitrage(const string& exchange_rate_file, const string& location_fi
         edges_negative_log_.emplace_back(it.first.first, it.first.second, -log(it.second));
     }
 
-    // TODO: read the location.csv file and construct the geo location map
     while (!location.eof()) {
         string line;
         string geo_location;
