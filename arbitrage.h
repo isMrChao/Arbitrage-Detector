@@ -19,6 +19,11 @@ struct Edge {
     double weight;
 };
 
+enum ExchangeMethod {
+    DIRECT,
+    BETTER_EXCHANGE_RATE
+};
+
 class Arbitrage
 {
 public:
@@ -85,7 +90,31 @@ public:
      * @param currency_to : the name of the destination currency
      * @return a vector list with the name of each currency as its element and the final exchange rate as the last element.
      */
-    vector<string> FindBestExchangeRate(const string& currency_from, const string& currency_to);
+    vector<string> GetBetterExchangeRate(const string& currency_from, const string& currency_to);
+
+    /**
+     * @brief a function that takes in the name of a geolocation and output a list of currencies in that location.
+     * If the currency does not exist, the function will output an empty vector.
+     * @param geolocation : the name of the geolocation
+     * @return a vector list with the name of each currency as its element.
+     */
+    vector<string> GetCurrencyList(const string& geolocation);
+
+    /**
+     * @brief  a function that has two input - the name of the reference currency and geographical filter (if the input
+     * vector is empty, the function will then traverse the whole graph). The function will traverse through all of the
+     * other currencies (using Breadth First Search) under the constraint of geo_filter to find the one that worth the
+     * most value in terms of how much 1 unit of that currency worth in the reference currency. The user is able to use
+     * different exchange method to find the best currency.
+     * @param reference_currency
+     * @param geo_filter
+     * @return the name of the most valuable currency in terms of how much 1 unit of that currency worth in the
+     * reference currency.
+     */
+    string GetMostValuableCurrency(const string& reference_currency, const vector<string>& geo_filter,
+                                   ExchangeMethod method);
+
+
 
 private:
     vector<vector<double>> adjacency_matrix_;
@@ -93,6 +122,7 @@ private:
     vector<Edge> edges_negative_log_;                       // negative log of the edge weight (Bellman-Ford algorithm)
     map<string, size_t> currency_index_;                    // map from currency name to index (or id)
     map<size_t, string> index_currency_;                    // map from index (or id) to currency name
+    map<string, vector<size_t>> geo_map_;                   // map from geolocation name to a vector of currency index
     vector<vector<bool>> prohibited_;                       // a matrix that records all prohibited conversions
 
     /**

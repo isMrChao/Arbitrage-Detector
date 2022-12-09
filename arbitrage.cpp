@@ -1,11 +1,15 @@
 #include "arbitrage.h"
 
 Arbitrage::Arbitrage(const string& exchange_rate_file, const string& location_file) {
-    // open the exchange_rate.csv file
+    // open the exchange_rate.csv and location.csv file
     fstream exchange_rate(exchange_rate_file);
+    fstream location(location_file);
     // exit the program if the file cannot be opened
     if (!exchange_rate.is_open()) {
         cout << "Error opening exchange_rate.csv" << endl;
+        exit(1);
+    } else if (!location.is_open()) {
+        cout << "Error opening location.csv" << endl;
         exit(1);
     }
     // use a map to store the currency index and their exchange rate
@@ -60,6 +64,28 @@ Arbitrage::Arbitrage(const string& exchange_rate_file, const string& location_fi
     }
 
     // TODO: read the location.csv file and construct the geo location map
+    while (!location.eof()) {
+        string line;
+        string geo_location;
+        vector<size_t> currency_index;
+        getline(location, line);
+
+        // parse the line
+        stringstream ss(line);
+        getline(ss, geo_location, ',');
+        string currency;
+        while (getline(ss, currency, ',')) {
+            if (currency.empty()) break;
+            currency_index.push_back(currency_index_[currency]);
+        }
+        geo_map_[geo_location] = currency_index;
+    }
+    location.close();
+    vector<size_t> all_currency;
+    for (auto & it : currency_index_) {
+        all_currency.push_back(it.second);
+    }
+    geo_map_["ALL"] = all_currency; // add all currency to the map under the key "ALL"
 }
 
 bool Arbitrage::IsArbitrage() {
@@ -178,6 +204,7 @@ vector<string> Arbitrage::GetArbitrageHelper() {
 double Arbitrage::GetExchangeRate(const string &currencyA, const string &currencyB) {
     // check for invalid currency input
     if (currencyA == currencyB) return 1;
+    if (currencyA.empty() || currencyB.empty()) return 0;
     if (currency_index_.find(currencyA) == currency_index_.end() || currency_index_.find(currencyB) == currency_index_.end()) return 0;
 
     // retrieve the exchange rate from the adjacency matrix
@@ -187,6 +214,7 @@ double Arbitrage::GetExchangeRate(const string &currencyA, const string &currenc
 vector<string> Arbitrage::GetBetterExchangeRate(const string &currency_from, const string &currency_to) {
     // check for invalid currency input
     if (currency_from == currency_to) return {};
+    if (currency_from.empty() || currency_to.empty()) return {};
     if (currency_index_.find(currency_from) == currency_index_.end() || currency_index_.find(currency_to) == currency_index_.end()) return {};
     if (prohibited_.empty()) GetArbitrage(); // construct the prohibited conversion matrix if it is empty
     if (prohibited_[currency_index_[currency_from]][currency_index_[currency_to]]) {
@@ -233,4 +261,71 @@ vector<string> Arbitrage::GetBetterExchangeRate(const string &currency_from, con
     }
     path.push_back(to_string(exchange_rate));
     return path;
+}
+
+vector<string> Arbitrage::GetCurrencyList(const string &geolocation) {
+    // check for invalid geolocation input
+    if (geo_map_.find(geolocation) == geo_map_.end()) return {};
+
+    // return the currency list
+    vector<size_t> currency_index_list = geo_map_[geolocation];
+    vector<string> currency_list(currency_index_list.size());
+    for (size_t i = 0; i < currency_index_list.size(); i++) {
+        currency_list[i] = index_currency_[currency_index_list[i]];
+    }
+    return currency_list;
+}
+
+string Arbitrage::GetMostValuableCurrency(const string &reference_currency, const vector<string> &geo_filter,
+                                          ExchangeMethod method) {
+    // check for invalid currency input
+    if (reference_currency.empty()) return "";
+    if (currency_index_.find(reference_currency) == currency_index_.end()) return "";
+    set<size_t> currency_index_set;
+    if (geo_filter.empty()) currency_index_set.insert(geo_map_["ALL"].begin(), geo_map_["ALL"].end());
+    else {
+        for (const string &geolocation : geo_filter) {
+            if (geo_map_.find(geolocation) == geo_map_.end()) return ""; // invalid geolocation
+            if (geolocation == "ALL") {
+                currency_index_set.insert(geo_map_["ALL"].begin(), geo_map_["ALL"].end());
+                break;
+            }
+            currency_index_set.insert(geo_map_[geolocation].begin(), geo_map_[geolocation].end());
+        }
+    }
+    if (currency_index_set.find(currency_index_[reference_currency]) == currency_index_set.end()) return ""; // invalid reference currency
+
+    // initialize the queue and visited set for BFS
+    queue<size_t> q;
+    map<size_t, bool> visited;
+    for (size_t currency_index : currency_index_set) {
+        q.push(currency_index);
+        visited[currency_index] = false;
+    }
+
+    double max_exchange_rate = 1;
+    size_t most_valuable_currency_index = currency_index_[reference_currency];
+    size_t reference_index = currency_index_[reference_currency];
+    // BFS
+    while (!q.empty()) {
+        size_t current_index = q.front();
+        q.pop();
+        double current_exchange_rate;
+        if (method == ExchangeMethod::DIRECT) current_exchange_rate = GetExchangeRate(index_currency_[current_index], reference_currency);
+        else {
+            vector<string> path = GetBetterExchangeRate(index_currency_[current_index], reference_currency);
+            current_exchange_rate = stod(path[path.size() - 1]);
+        }
+        if (current_exchange_rate > max_exchange_rate) {
+            max_exchange_rate = current_exchange_rate;
+            most_valuable_currency_index = current_index;
+        }
+        for (size_t v : currency_index_set) {
+            if (adjacency_matrix_[current_index][v] != 0 && visited.find(v) == visited.end() && !visited[v]) {
+                q.push(v);
+            }
+        }
+        visited[current_index] = true;
+    }
+    return index_currency_[most_valuable_currency_index];
 }

@@ -31,5 +31,49 @@ int main() {
             std::cout << exchange_strategy[i] << " -> ";
         }
     }
+
+//    vector<string> currency_list = arbitrage.GetCurrencyList("Africa");
+//    for (auto & currency : currency_list) {
+//        std::cout << currency << " ";
+//    }
+//    std::cout << std::endl;
+//    vector<string> currency_list2 = arbitrage.GetCurrencyList("East Asia");
+//    for (auto & currency : currency_list2) {
+//        std::cout << currency << " ";
+//    }
+//    std::cout << std::endl;
+//    vector<string> currency_list3 = arbitrage.GetCurrencyList("Europe");
+//    for (auto & currency : currency_list3) {
+//        std::cout << currency << " ";
+//    }
+//    std::cout << std::endl;
+//    vector<string> currency_list4 = arbitrage.GetCurrencyList("Middle East");
+//    for (auto & currency : currency_list4) {
+//        std::cout << currency << " ";
+//    }
+//    std::cout << std::endl;
+//    vector<string> currency_list5 = arbitrage.GetCurrencyList("North America");
+//    for (auto & currency : currency_list5) {
+//        std::cout << currency << " ";
+//    }
+//    std::cout << std::endl;
+//    vector<string> currency_list6 = arbitrage.GetCurrencyList("Oceania");
+//    for (auto & currency : currency_list6) {
+//        std::cout << currency << " ";
+//    }
+//    std::cout << std::endl;
+//    vector<string> currency_list7 = arbitrage.GetCurrencyList("South America");
+//    for (auto & currency : currency_list7) {
+//        std::cout << currency << " ";
+//    }
+//    std::cout << std::endl;
+//    vector<string> currency_list8 = arbitrage.GetCurrencyList("South Asia");
+//    for (auto & currency : currency_list8) {
+//        std::cout << currency << " ";
+//    }
+    std::cout << std::endl;
+
+    string most_valuable_currency = arbitrage.GetMostValuableCurrency("USD", {}, DIRECT);
+    std::cout << "Most valuable currency: " << most_valuable_currency << std::endl;
     return 0;
 }
