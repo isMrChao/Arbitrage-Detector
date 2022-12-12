@@ -23,6 +23,8 @@ Arbitrage::Arbitrage(const string& exchange_rate_file, const string& location_fi
         size_t indexB;
         double rate;
         getline(exchange_rate, line);
+        // skip the empty line
+        if (line.empty()) continue;
 
         // parse the line
         stringstream ss(line);
@@ -68,6 +70,8 @@ Arbitrage::Arbitrage(const string& exchange_rate_file, const string& location_fi
         string geo_location;
         vector<size_t> currency_index;
         getline(location, line);
+        // skip the empty line
+        if (line.empty()) continue;
 
         // parse the line
         stringstream ss(line);
@@ -202,9 +206,9 @@ vector<string> Arbitrage::GetArbitrageHelper() {
 
 double Arbitrage::GetExchangeRate(const string &currencyA, const string &currencyB) {
     // check for invalid currency input
-    if (currencyA == currencyB) return 1;
     if (currencyA.empty() || currencyB.empty()) return 0;
     if (currency_index_.find(currencyA) == currency_index_.end() || currency_index_.find(currencyB) == currency_index_.end()) return 0;
+    if (currencyA == currencyB) return 1;
 
     // retrieve the exchange rate from the adjacency matrix
     return adjacency_matrix_[currency_index_[currencyA]][currency_index_[currencyB]];
@@ -242,7 +246,6 @@ vector<string> Arbitrage::GetBetterExchangeRate(const string &currency_from, con
             }
         }
     }
-
     // return the path
     vector<string> path;
     size_t current_index = currency_index_[currency_to];

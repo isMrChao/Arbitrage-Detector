@@ -2,6 +2,7 @@
 #include "arbitrage.h"
 
 int main() {
+    Arbitrage arbitrage1("exchange_rate_test.csv", "location_test.csv");
     Arbitrage arbitrage("exchange_rate.csv", "location.csv");
 
     vector<vector<string>> result = arbitrage.GetArbitrage();

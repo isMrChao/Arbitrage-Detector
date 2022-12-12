@@ -63,7 +63,7 @@ public:
     /**
      * @brief a function that takes in the name of two currencies and outputs the exchange rate
      * Notice: the function will output 0 if there is no exchange rate between the two currencies or
-     * if one of the currencies does not exist.
+     * if one of the currencies does not exist or if one of the input is empty.
      * @param currencyA : currency from
      * @param currencyB : currency to
      * @return a double representing the exchange rate
@@ -95,7 +95,7 @@ public:
 
     /**
      * @brief a function that takes in the name of a geolocation and output a list of currencies in that location.
-     * If the currency does not exist, the function will output an empty vector.
+     * If the geolocation does not exist, the function will output an empty vector.
      * @param geolocation : the name of the geolocation
      * @return a vector list with the name of each currency as its element.
      */
