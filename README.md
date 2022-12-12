@@ -20,7 +20,7 @@ Several changes have made to the original proposal:
 - GetBestExchangeRate function is now re-named to GetBetterExchangeRate due to the limitation on the Bellman-Ford shortest path algorithm when the graph has negative cycles. The current implementation of GetBetterExchangeRate is able to work with negative cycles, but the output is not guaranteed to be the best exchange rate. 
 - Users can now select the exchange method (DIRECT using GetExchangeRate and BETTER_EXCHANGE_RATE using GetBetterExchangeRate) when using the GetMostValuableCurrency function. The original proposal only required the function to output the most valuable currency using the DIRECT exchange method.
 
-Below is the technical details of our implementation.
+Below is the technical details of our implementation:
 
 For the exchange rate data, we used Excel to retrieve the exchange rates between currencies and stored them as exchange_rate.csv file. We implemented two adjacency matrices and one adjacency list with each one of them serving a different purpose to store the weighted graph converted from the input dataset.
 (The first adjacency matrix is used to store the direct exchange rates between currencies, the second adjacency matrix stores the negative log of the direct exchange rates that can be used by Floyd–Warshall algorithm to detect arbitrage, and the adjacency list also stores the negative log of the direct exchange rates but is used by Bellman-Ford algorithm to detect the exact arbitrage cycle.)
