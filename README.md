@@ -1,3 +1,4 @@
+
 # CS 225 Final: Arbitrage Detector
 ## Installation
 - For the best compatibility, please use **CLion** to install the program by simply select: 
