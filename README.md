@@ -1,5 +1,4 @@
 ![This is an image](https://raw.githubusercontent.com/isMrChao/cs225final/main/Header.png)
-# CS 225 Final: Arbitrage Detector
 ## Installation
 - For the best compatibility, please use **CLion** to install the program by simply select: 
 ```
