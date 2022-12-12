@@ -1,6 +1,7 @@
 # cs225final
-# Note: .csv files are located in the cmake-build-debug folder
-# this is the written report
+- Note: .csv files are located in the cmake-build-debug folder
+- For the best compatibility, please use CLion to run the program by simply creating a new project from version control with the link to this repository (https://github.com/isMrChao/cs225final.git). The main executable can be run by selecting Final_Project from the drop down menu in the top right corner of the CLion window. The test executable can be run by selecting Test_Final_Project from the drop down menu in the top right corner of the CLion window.
+# Written report
 
 In the proposal, we stated the leading question of this project. That is, to develop a method in making money by simply converting currencies from one to another. Now we can honestly say that the goal is achieved.
 
