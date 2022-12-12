@@ -1,11 +1,11 @@
-# cs225final: **Arbitrage Detector**
-- Note: .csv files are located in the cmake-build-debug folder
-- For the best compatibility, please use CLion to run the program by simply creating choose: 
+# CS 225 Final: Arbitrage Detector
+- For the best compatibility, please use **CLion** to install the program by simply select: 
 ```
 File -> New -> Project from Version Control -> Repository URL: https://github.com/isMrChao/cs225final.git
 ```
 - The main executable can be run by selecting Final_Project from the drop down menu in the top right corner of the CLion window. The test executable can be run by selecting Test_Final_Project from the drop down menu in the top right corner of the CLion window.
 - ~~Due to the slow link speed of MinGW (default compiler in CLion), the test executable may take a long time to compile with Catch2 after making changes to the code.~~ Catch2 test environment has been updated to 3.0. Now expect faster compilation time.
+- Note: .csv files are located in the cmake-build-debug folder
 # Written Report
 
 In the proposal, we stated the leading question of this project. That is, to develop a method in making money by simply converting currencies from one to another. Now we can honestly say that the goal is achieved.
