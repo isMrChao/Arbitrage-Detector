@@ -15,7 +15,10 @@ File -> New -> Project from Version Control -> Repository URL: https://github.co
 
 In the proposal, we stated the leading question of this project. That is, to develop a method in making money by simply converting currencies from one to another. Now we can honestly say that the goal is achieved.
 
-Several changes have made to the original proposal. The GetArbitrage function is now able to output most arbitrage cycles in the currency exchange market. The original proposal only required the function to output one arbitrage cycle. GetBestExchangeRate function is now re-named to GetBetterExchangeRate due to the limitation on the Bellman-Ford shortest path algorithm when the graph has negative cycles. The current implementation of GetBetterExchangeRate is able to work with negative cycles, but the output is not guaranteed to be the best exchange rate. Users can now select the exchange method (DIRECT using GetExchangeRate and BETTER_EXCHANGE_RATE using GetBetterExchangeRate) when using the GetMostValuableCurrency function. The original proposal only required the function to output the most valuable currency using the DIRECT exchange method.
+Several changes have made to the original proposal:
+- The GetArbitrage function is now able to output most arbitrage cycles in the currency exchange market. The original proposal only required the function to output one arbitrage cycle. 
+- GetBestExchangeRate function is now re-named to GetBetterExchangeRate due to the limitation on the Bellman-Ford shortest path algorithm when the graph has negative cycles. The current implementation of GetBetterExchangeRate is able to work with negative cycles, but the output is not guaranteed to be the best exchange rate. 
+- Users can now select the exchange method (DIRECT using GetExchangeRate and BETTER_EXCHANGE_RATE using GetBetterExchangeRate) when using the GetMostValuableCurrency function. The original proposal only required the function to output the most valuable currency using the DIRECT exchange method.
 
 Below is the technical details of our implementation.
 
