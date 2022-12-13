@@ -7,7 +7,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <bits/stdc++.h>
+#include "stdc++.h" // added stdc++.h to resolve compatibility issues with macOS
 
 using namespace std;
 

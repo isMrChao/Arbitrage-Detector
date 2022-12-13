@@ -3,7 +3,7 @@ project(Final_Project)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Final_Project main.cpp arbitrage.cpp arbitrage.h)
+add_executable(Final_Project main.cpp arbitrage.cpp arbitrage.h stdc++.h)
 
 Include(FetchContent)
 
@@ -15,5 +15,5 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(Catch2)
 
-add_executable(Test_Final_Project tests.cpp arbitrage.cpp arbitrage.h)
+add_executable(Test_Final_Project tests.cpp arbitrage.cpp arbitrage.h stdc++.h)
 target_link_libraries(Test_Final_Project PRIVATE Catch2::Catch2WithMain)
