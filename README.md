@@ -1,12 +1,37 @@
 ![This is an image](https://raw.githubusercontent.com/isMrChao/cs225final/main/Header.png)
 ## Installation
-- For the best compatibility, please use **CLion** to install the program by simply select: 
+Note: .csv files are located in the csv_files folder
+
+For the best compatibility, please use **CLion** to install the program by simply select: 
 ```
 File -> New -> Project from Version Control -> Repository URL: https://github.com/isMrChao/cs225final.git
 ```
-- The main executable can be run by selecting Final_Project from the drop down menu in the top right corner of the CLion window. The test executable can be run by selecting Test_Final_Project from the drop down menu in the top right corner of the CLion window.
+- The main executable can be run by selecting Final_Project from the drop down menu in the top right corner of the CLion window. The test executable can be run by selecting Test_Final_Project from the drop down menu in the top right corner of the CLion window. If Test_Final_Project is not available, please select:
+```
+Edit Configurations -> CMakeApplication -> Add new run configuration -> Name: Test_Final_Project -> Target: Test_Final_Project -> OK
+```
 - ~~Due to the slow link speed of MinGW (default compiler in CLion), the test executable may take a long time to compile with Catch2 after making changes to the code.~~ Catch2 test environment has been updated to 3.0. Now expect faster compilation time.
-- Note: .csv files are located in the csv_files folder
+
+For Visual Studio Code, please install the related extensions and clone the repository to your local machine. After cloning, please change the working directory to the root directory of the project and run the following commands:
+```
+mkdir build
+cd build
+```
+- After creating the build directory, please run the following commands:
+```
+cmake ..
+make
+```
+- The main executable can be run by running the following command:
+```
+./Final_Project
+```
+- The test executable can be run by running the following command:
+```
+./Test_Final_Project
+```
+
+
 
 ## Presentation
 - To be updated
