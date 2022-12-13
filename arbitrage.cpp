@@ -6,10 +6,10 @@ Arbitrage::Arbitrage(const string& exchange_rate_file, const string& location_fi
     fstream location(location_file);
     // exit the program if the file cannot be opened
     if (!exchange_rate.is_open()) {
-        cout << "Error opening exchange_rate.csv" << endl;
+        cout << "Error opening exchange_rate.csv. Please make sure to use the correct file path." << endl;
         exit(1);
     } else if (!location.is_open()) {
-        cout << "Error opening location.csv" << endl;
+        cout << "Error opening location.csv. Please make sure to use the correct file path." << endl;
         exit(1);
     }
     // use a map to store the currency index and their exchange rate
