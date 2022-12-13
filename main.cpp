@@ -2,8 +2,9 @@
 #include "arbitrage.h"
 
 int main() {
-    Arbitrage arbitrage1("exchange_rate_test.csv", "location_test.csv");
-    Arbitrage arbitrage("exchange_rate.csv", "location.csv");
+    string exchange_rate_file = "D:\\cc-study\\CS225\\Final_Project\\csv_files\\exchange_rate.csv"; // [Please change this] absolute path to exchange_rate.csv
+    string location_file = "D:\\cc-study\\CS225\\Final_Project\\csv_files\\location.csv";           // [Please change this] absolute path to location.csv
+    Arbitrage arbitrage(exchange_rate_file, location_file);
 
     vector<vector<string>> result = arbitrage.GetArbitrage();
     for (auto & arbitrage_path : result) {

@@ -3,6 +3,10 @@
 
 using namespace std;
 
+static string exchange_rate_file_test = R"(D:\cc-study\CS225\Final_Project\csv_files\exchange_rate_test.csv)";   // [Please change this] absolute path to exchange_rate_test.csv
+static string exchange_rate_file_test2 = R"(D:\cc-study\CS225\Final_Project\csv_files\exchange_rate_test2.csv)"; // [Please change this] absolute path to exchange_rate_test2.csv
+static string location_file_test = R"(D:\cc-study\CS225\Final_Project\csv_files\location_test.csv)";             // [Please change this] absolute path to location_test.csv
+
 bool isPresent(const vector<string>& v, const string& s) {
     for (auto& i : v) {
         if (i == s) return true;
@@ -37,7 +41,7 @@ bool hasCycle(const vector<vector<string>>& paths, const vector<string>& cycle) 
 }
 
 TEST_CASE("Test GetExchangeRate", "[get_exchange_rate]") {
-    Arbitrage arbitrage("exchange_rate_test.csv", "location_test.csv");
+    Arbitrage arbitrage(exchange_rate_file_test, location_file_test);
     SECTION("Random Basic Exchanges") {
         REQUIRE(arbitrage.GetExchangeRate("USD", "EUR") == 0.741);
         REQUIRE(arbitrage.GetExchangeRate("EUR", "USD") == 1.349);
@@ -60,7 +64,7 @@ TEST_CASE("Test GetExchangeRate", "[get_exchange_rate]") {
 }
 
 TEST_CASE("Test GetCurrencyList", "[get_currency_list]") {
-    Arbitrage arbitrage("exchange_rate_test.csv", "location_test.csv");
+    Arbitrage arbitrage(exchange_rate_file_test, location_file_test);
     SECTION("North America") {
         vector<string> NA = arbitrage.GetCurrencyList("North America");
         REQUIRE(NA.size() == 2);
@@ -82,7 +86,7 @@ TEST_CASE("Test GetCurrencyList", "[get_currency_list]") {
 }
 
 TEST_CASE("Test Arbitrage Constructor", "[constructor]") {
-    Arbitrage arbitrage("exchange_rate_test.csv", "location_test.csv");
+    Arbitrage arbitrage(exchange_rate_file_test, location_file_test);
     // check if the adjacency matrix is constructed correctly
     SECTION("USD - XXX") {
         REQUIRE(arbitrage.GetExchangeRate("USD", "USD") == 1);
@@ -132,16 +136,16 @@ TEST_CASE("Test Arbitrage Constructor", "[constructor]") {
 
 TEST_CASE("Test Arbitrage IsArbitrage", "[is_arbitrage]") {
     // check if the arbitrage_true is detected correctly
-    Arbitrage arbitrage_true("exchange_rate_test.csv", "location_test.csv");
+    Arbitrage arbitrage_true(exchange_rate_file_test, location_file_test);
     REQUIRE(arbitrage_true.IsArbitrage() == true);
 
-    Arbitrage arbitrage_false("exchange_rate_test2.csv", "location_test.csv");
+    Arbitrage arbitrage_false(exchange_rate_file_test2, location_file_test);
     REQUIRE(arbitrage_false.IsArbitrage() == false);
 }
 
 TEST_CASE("Test Arbitrage GetArbitragePath", "[get_arbitrage]") {
     // check if the arbitrage_true is detected correctly
-    Arbitrage arbitrage_true("exchange_rate_test.csv", "location_test.csv");
+    Arbitrage arbitrage_true(exchange_rate_file_test, location_file_test);
     vector<vector<string>> path = arbitrage_true.GetArbitrage();
 
     // check if the path is correct
@@ -151,13 +155,13 @@ TEST_CASE("Test Arbitrage GetArbitragePath", "[get_arbitrage]") {
     REQUIRE(hasCycle(path, cycle2) == true);
 
     // check if GetArbitrage() returns an empty vector if there is no arbitrage
-    Arbitrage arbitrage_false("exchange_rate_test2.csv", "location_test.csv");
+    Arbitrage arbitrage_false(exchange_rate_file_test2, location_file_test);
     vector<vector<string>> path_2 = arbitrage_false.GetArbitrage();
     REQUIRE(path_2.empty());
 }
 
 TEST_CASE("Test GetBetterExchangeRate", "[get_better_exchange_rate]") {
-    Arbitrage arbitrage("exchange_rate_test2.csv", "location_test.csv");
+    Arbitrage arbitrage(exchange_rate_file_test2, location_file_test);
     SECTION("normal input") {
         vector<string> path = arbitrage.GetBetterExchangeRate("CHF", "EUR");
         REQUIRE(path.size() == 6);
@@ -179,7 +183,7 @@ TEST_CASE("Test GetBetterExchangeRate", "[get_better_exchange_rate]") {
 }
 
 TEST_CASE("Test GetMostValuableCurrency", "[get_most_valuable_currency]") {
-    Arbitrage arbitrage("exchange_rate_test.csv", "location_test.csv");
+    Arbitrage arbitrage(exchange_rate_file_test, location_file_test);
     SECTION("normal input") {
         REQUIRE(arbitrage.GetMostValuableCurrency("USD", {}, DIRECT) == "GBP");
         REQUIRE(arbitrage.GetMostValuableCurrency("USD", {}, BETTER_EXCHANGE_RATE) == "GBP");
