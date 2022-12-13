@@ -3,7 +3,7 @@
 This is a project for CS225 Introduction to Data Structures and Algorithms. This project is aimed to find arbitrage opportunities in the currency exchange market, in other words, to generate profit by buying and selling currencies. Users can input their own currency exchange rates as .csv files and the program will seek for any arbitrage opportunities by using negative cycle detection algorithm.
 
 # Installation
-**Note: .csv files are located in the csv_files folder. Before running the program, please make sure you update the file path in the main.cpp file and test.cpp file.**
+**Note: .csv files are located in the csv_files folder. Before running the program, please make sure to update the file path in the main.cpp file and test.cpp file.**
 
 ### Clion
 For the best compatibility, please use **CLion** to install the program by simply select: 
