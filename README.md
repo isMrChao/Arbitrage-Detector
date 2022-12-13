@@ -1,6 +1,6 @@
 ![This is an image](https://raw.githubusercontent.com/isMrChao/cs225final/main/Header.png)
 ## Installation
-Note: .csv files are located in the csv_files folder. Before running the program, please make sure you update the file path in the main.cpp file and test.cpp file.
+**Note: .csv files are located in the csv_files folder. Before running the program, please make sure you update the file path in the main.cpp file and test.cpp file.**
 
 For the best compatibility, please use **CLion** to install the program by simply select: 
 ```
