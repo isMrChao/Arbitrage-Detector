@@ -5,6 +5,7 @@ This is a project for CS225 Introduction to Data Structures and Algorithms. This
 ## Installation
 **Note: .csv files are located in the csv_files folder. Before running the program, please make sure you update the file path in the main.cpp file and test.cpp file.**
 
+### Clion
 For the best compatibility, please use **CLion** to install the program by simply select: 
 ```
 File -> New -> Project from Version Control -> Repository URL: https://github.com/isMrChao/cs225final.git
@@ -15,6 +16,7 @@ Edit Configurations -> CMakeApplication -> Add new run configuration -> Name: Te
 ```
 - ~~Due to the slow link speed of MinGW (default compiler in CLion), the test executable may take a long time to compile with Catch2 after making changes to the code.~~ Catch2 test environment has been updated to 3.0. Now expect faster compilation time.
 
+### Visual Studio Code
 For **Visual Studio Code**, please install the related extensions and clone the repository to your local machine. After cloning, please change the working directory to the root directory of the project and run the following commands:
 ```
 mkdir build
