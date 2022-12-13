@@ -12,7 +12,7 @@ Edit Configurations -> CMakeApplication -> Add new run configuration -> Name: Te
 ```
 - ~~Due to the slow link speed of MinGW (default compiler in CLion), the test executable may take a long time to compile with Catch2 after making changes to the code.~~ Catch2 test environment has been updated to 3.0. Now expect faster compilation time.
 
-For Visual Studio Code, please install the related extensions and clone the repository to your local machine. After cloning, please change the working directory to the root directory of the project and run the following commands:
+For **Visual Studio Code**, please install the related extensions and clone the repository to your local machine. After cloning, please change the working directory to the root directory of the project and run the following commands:
 ```
 mkdir build
 cd build
